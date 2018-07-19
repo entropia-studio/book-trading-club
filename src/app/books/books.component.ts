@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
-import {BooksService} from '../books.service';
-import {Book} from '../book';
-
-
+import {DatabaseService} from '../services/database.service';
+import {Book} from '../interfaces/book';
 
 
 
@@ -13,9 +11,11 @@ import {Book} from '../book';
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.css']
 })
-export class BooksComponent implements OnInit {
+export class BooksComponent implements OnInit {  
 
-  constructor(private booksService: BooksService) { }
+  constructor(    
+    private dataBaseService: DatabaseService) {}
+  
   BOOK_DATA: Book[] = [];
 
   displayedColumns: string[] = ['select', 'title', 'description', 'username'];
@@ -37,10 +37,10 @@ export class BooksComponent implements OnInit {
         this.dataSource.data.forEach(row => this.selection.select(row));
   }  
 
-  ngOnInit() {
-    this.booksService.getBooks().subscribe(book => {      
-      Object.assign(this.BOOK_DATA,book);      
-    })
+  ngOnInit() {    
+    this.dataBaseService.getBooks().subscribe(books => {      
+      Object.assign(this.BOOK_DATA,books);      
+    })    
   }
 
 }

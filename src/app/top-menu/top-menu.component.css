@@ -1,6 +1,13 @@
-.mat-raised-button{
-    margin-left: 1em;
-}
 .top-menu{
-    font-size: 1em;
+    font-size: 1em;    
+}
+
+.top-menu button:first-child {
+    margin-left: 2em;
+}
+
+.top-menu button:last-child {
+    align-content: flex-end;
+    align-items: flex-end;
+    align-self: flex-end;   
 }

@@ -8,6 +8,12 @@ import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { TopMenuComponent } from './top-menu/top-menu.component';
 import { BooksComponent } from './books/books.component';
+//Firebase modules
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { UsersComponent } from './users/users.component';
 
 
 
@@ -16,15 +22,19 @@ import { BooksComponent } from './books/books.component';
   declarations: [
     AppComponent,
     TopMenuComponent,
-    BooksComponent
+    BooksComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     HttpClientModule,
     MatCardModule,
     MatButtonModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
