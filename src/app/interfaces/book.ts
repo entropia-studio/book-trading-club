@@ -1,6 +1,7 @@
-export interface Book {    
-    _id: string;
+export interface Book {            
+    id?: string;
     title: string;
     description: string;
-    username: string;       
+    username?: string;     
+    disabled?: boolean;  
 }

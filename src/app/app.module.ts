@@ -6,6 +6,11 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatIconModule} from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TopMenuComponent } from './top-menu/top-menu.component';
 import { BooksComponent } from './books/books.component';
 //Firebase modules
@@ -14,6 +19,10 @@ import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { UsersComponent } from './users/users.component';
+import { AddbookComponent } from './addbook/addbook.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NameEditorComponent } from './name-editor/name-editor.component';
+import { BooklistComponent } from './booklist/booklist.component';
 
 
 
@@ -23,18 +32,28 @@ import { UsersComponent } from './users/users.component';
     AppComponent,
     TopMenuComponent,
     BooksComponent,
-    UsersComponent
+    UsersComponent,
+    AddbookComponent,
+    NameEditorComponent,
+    BooklistComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule,    
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     HttpClientModule,
+    MatMenuModule,
     MatCardModule,
     MatButtonModule,
     MatTableModule,
     MatCheckboxModule,
-    AppRoutingModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,10 +2,25 @@ table {
     width: 100%;
 }
 
-button{
-  margin-top: 1em;
+button{  
+  margin-right: 1em;
 }
 
 .mat-card{
   margin-top: 0.5em;
+}
+
+.book{
+  width: 200px;
+}
+.book-list{
+  display: flex;
+  justify-content: space-around;
+}
+.delete-btn{
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0px;
 }

@@ -1,43 +1,28 @@
-<mat-card>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="BOOK_DATA.length > 0">
-
-        <!-- Checkbox Column -->
-        <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-          </th>
-          <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()"
-                          (change)="$event ? selection.toggle(row) : null"
-                          [checked]="selection.isSelected(row)">
-            </mat-checkbox>
-          </td>
-        </ng-container>     
-        <!-- Title Column -->
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef> Title </th>
-          <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-        </ng-container>
-      
-        <!-- Description Column -->
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef> Description </th>
-          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-        </ng-container>
-      
-        <!-- User Column -->
-        <ng-container matColumnDef="username">
-          <th mat-header-cell *matHeaderCellDef> User </th>
-          <td mat-cell *matCellDef="let element"> {{element.username}} </td>
-        </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-            (click)="selection.toggle(row)">
-        </tr>
-      </table>     
-      <button mat-raised-button value="new-request" color="primary">New request</button>
+<!--
+<app-booklist [dataSource]="dataSourceUser" cardTitle="User books"></app-booklist>
+<app-booklist [dataSource]="dataSource" cardTitle="Books from other users" *ngIf="!parentUserName"></app-booklist>
+-->
+<form #bookForm="ngForm">
+<mat-card class="book-list">
+  <mat-card *ngFor="let book of books" class="book">
+    <mat-card-title>{{book.titile}}</mat-card-title>
+    <mat-card-content>
+      <mat-checkbox value="{{book.id}}" (click)="toggleCheck(book,!spy.checked)" [disabled]="book.disabled" #spy>{{book.title}}</mat-checkbox>
+      <h3>{{book.description}}</h3>    
+      <h5>from {{book.username}}</h5>
+      <button *ngIf="book.username == username" (click)="deleteBook(book.id)" class="delete-btn">        
+        <mat-icon color="warn" >delete</mat-icon>  
+      </button>            
+      {{spy.checked}}
+    </mat-card-content>  
+  </mat-card>  
+</mat-card>
+</form>
+<mat-card *ngIf="!parentUserName">
+  <button mat-raised-button 
+    color="primary" 
+    routerLink="/addbook" 
+    *ngIf="!parentUserName"      
+    [disabled]="requesButtonDisabled">New request</button>    
+  <button mat-raised-button routerLink="/addbook" *ngIf="!parentUserName">Add book</button>  
 </mat-card>

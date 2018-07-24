@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Observable,throwError,of} from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import {Book} from '../interfaces/book';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore,AngularFirestoreCollection } from 'angularfire2/firestore';
 
 
 @Injectable({
@@ -12,17 +10,49 @@ import { AngularFirestore } from 'angularfire2/firestore';
 })
 export class DatabaseService {
   
-  constructor(private http: HttpClient,private db: AngularFirestore,) {}
+  private booksCollection: AngularFirestoreCollection<Book>;
+  books: Observable<Book[]>;
 
-  urlApi: string = 'http://localhost:4500/api/books/';
+  constructor(private afs: AngularFirestore,) {}
+  
 
-  getBooks = ():Observable<any[]> => {    
-    return this.db.collection('/books').valueChanges();
+
+  getBooks = ():Observable<Book[]> => {        
+    this.booksCollection = this.afs.collection<Book>('books',ref => ref.orderBy('username','asc'));
+    // Obtain id from the document (metadata)
+    this.books = this.booksCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Book;
+        const id = a.payload.doc.id;        
+        return { id, ...data };
+      }))
+    )
+    return this.books;    
   }
 
   getUsers = ():Observable<any[]> => {    
-    return this.db.collection('/users').valueChanges();
+    return this.afs.collection('/users').valueChanges();
   }
+
+  getUsername = () : string => {    
+    return 'javier';
+  }
+
+  addBook = (book: Book): void => {   
+    this.booksCollection = this.afs.collection<Book>('books');
+    this.booksCollection.add(book).then(() => {
+      console.log('Book added',book)
+    }).catch(error => {
+      console.error("error",error);
+    });
+  }
+
+  
+  deleteBook = (id: string): Promise<void> => {
+    this.booksCollection = this.afs.collection<Book>('books');
+    return this.booksCollection.doc(id).delete();
+  }
+  
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -34,6 +64,8 @@ export class DatabaseService {
       return of(result as T);
     };
   }
+
+  
 
   
 }

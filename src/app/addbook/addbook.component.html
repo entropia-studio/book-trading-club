@@ -1,0 +1,27 @@
+<form [formGroup]="bookForm" #formDirective="ngForm" (ngSubmit)="onSubmit(formDirective)">    
+    <mat-card>
+    <mat-card-title>Add book</mat-card-title>
+    <mat-card-content>
+        <mat-form-field>                
+            <input matInput formControlName="title" placeholder="Title" required>            
+        </mat-form-field>
+        <mat-form-field>               
+            <input matInput formControlName="description" placeholder="Description" required>
+        </mat-form-field>                        
+    </mat-card-content>
+    <mat-card-actions>       
+        <button mat-raised-button
+            color="accent"            
+            type="submit"
+            [disabled]="!bookForm.valid">
+            Save
+        </button>       
+    </mat-card-actions>    
+</mat-card>
+</form>
+<app-books [parentUserName]="parentUserName"></app-books>
+
+
+
+
+
