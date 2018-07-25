@@ -23,6 +23,8 @@ import { AddbookComponent } from './addbook/addbook.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NameEditorComponent } from './name-editor/name-editor.component';
 import { BooklistComponent } from './booklist/booklist.component';
+import { RequestnewComponent } from './requestnew/requestnew.component';
+import { RequestsComponent } from './requests/requests.component';
 
 
 
@@ -35,7 +37,9 @@ import { BooklistComponent } from './booklist/booklist.component';
     UsersComponent,
     AddbookComponent,
     NameEditorComponent,
-    BooklistComponent
+    BooklistComponent,
+    RequestnewComponent,
+    RequestsComponent
   ],
   imports: [
     BrowserModule,    

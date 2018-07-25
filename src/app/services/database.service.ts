@@ -12,6 +12,7 @@ export class DatabaseService {
   
   private booksCollection: AngularFirestoreCollection<Book>;
   books: Observable<Book[]>;
+  booksRequest: Book[];
 
   constructor(private afs: AngularFirestore,) {}
   
@@ -52,7 +53,27 @@ export class DatabaseService {
     this.booksCollection = this.afs.collection<Book>('books');
     return this.booksCollection.doc(id).delete();
   }
+
+  setRequestBooks = (books: Book[]): void => {
+    this.booksRequest = books;
+    console.log("booksRequest",this.booksRequest);
+  } 
   
+  // Returns the book selected for the request that belongs to the user
+  getBookRequestUser = (): Book => {
+    var mBook = this.booksRequest.filter(book => {
+      return book.disabled !== true && book.username === this.getUsername();
+    });
+    return mBook[0];
+  }  
+
+  // Returns the book selected for the request that not belongs to the user
+  getBookRequest = (): Book => {
+    var mBook = this.booksRequest.filter(book => {
+      return book.disabled !== true && book.username !== this.getUsername();
+    });
+    return mBook[0];
+  }  
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

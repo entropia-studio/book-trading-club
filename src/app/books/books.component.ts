@@ -3,6 +3,8 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource, MatSort} from '@angular/material';
 import {DatabaseService} from '../services/database.service';
 import {Book} from '../interfaces/book';
+import {Router} from '@angular/router';
+
 
 
 
@@ -16,12 +18,13 @@ export class BooksComponent implements OnInit {
   @Input() parentUserName: string;
   @ViewChild(MatSort) sort: MatSort;
 
-  books: Book[] = [];
+  books: Book[];
   username: string;  
   requesButtonDisabled: boolean = true;
 
   constructor(    
-    private dataBaseService: DatabaseService) {} 
+    private dataBaseService: DatabaseService,
+    private router: Router) {} 
   
 
   displayedColumns: string[] = ['select', 'title', 'description', 'username'];    
@@ -54,6 +57,7 @@ export class BooksComponent implements OnInit {
   getBooks(): void {
     
     this.dataBaseService.getBooks().subscribe(books => {                              
+      this.books = [];
       books.map(book => {
         this.books.push({
           id: book.id,
@@ -63,6 +67,8 @@ export class BooksComponent implements OnInit {
           disabled: false
         })
       })
+
+      console.log('1st books: ',this.books);
       //this.books = books;
       // Add book component only shows the user books
       if (this.parentUserName){       
@@ -76,8 +82,7 @@ export class BooksComponent implements OnInit {
         this.dataSource.data = books.filter(book => {
           return book.username !== this.dataBaseService.getUsername();
         });  
-      }   
-      console.log('DataSource: ',this.dataSource.data);   
+      }         
     
     })      
   }
@@ -86,37 +91,40 @@ export class BooksComponent implements OnInit {
     this.dataBaseService.deleteBook(bookId);    
   }    
 
-  // Check or uncheck the elements depending on its state
-  // It takes into account books from the user and the other ones
-  toggleCheck(bookForm: Book, checked: boolean): void{   
-    console.log('Book',bookForm);
-    if (checked){
-      this.books.map((book,index) => {
-        if (book.id != bookForm.id && book.username == bookForm.username){
-          this.books[index].disabled = true;
-        }
-      })
+  // Check/Uncheck books to avoid multiple selection
+  // Only is possible to check one book from the user and other one from the library
+  // to perform a new request
+  toggleCheck(index: number, checked: boolean): void{       
+    const username: string = this.books[index].username;    
+    // Need to activate the New request button
+    var booksChecked: number = 0;
+    this.books.map((book,i) => {      
+      if (checked){        
+        if (username === this.username){
+          this.books[i].disabled = i !== index && book.username === username ? true :  book.disabled;                            
+        }else{
+          this.books[i].disabled = i !== index && book.username !== this.username ? true :  book.disabled;                
+        }                  
+      }else{
+        if (username === this.username){
+          this.books[i].disabled = username === book.username ?  false : book.disabled;
+        }else{
+          this.books[i].disabled = this.username !== book.username ?  false : book.disabled;
+        }        
+      }      
+      // Count the selected books that not belong the username
+      if (book.username !== username && !book.disabled){        
+        booksChecked++;
+      }
       
-    }else{
-      this.books.map((book,index) => {        
-        if (book.username == bookForm.username)  
-          this.books[index].disabled = false;        
-      })
-    }    
-    this.requesButtonDisabled = this.isRequestPossible();
+    })        
+    // New request active only if the user has selected one general book and one own book
+    this.requesButtonDisabled = booksChecked === 1 ? false : true;    
   }
 
-  isRequestPossible():boolean{
-    let userBookSelected, otherBookSelected = false;
-    this.books.map(book => {
-      if (book.username !== this.username && book.disabled === false){
-        otherBookSelected = true;
-      } 
-      if (book.username === this.username && book.disabled === false){
-        userBookSelected = true;
-      } 
-    })
-    return userBookSelected && otherBookSelected;
+  onSubmit():void{
+    this.dataBaseService.setRequestBooks(this.books);
+    //this.router.navigateByUrl('/request/new');
   }
 
 }

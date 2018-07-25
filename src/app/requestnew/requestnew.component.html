@@ -1,0 +1,22 @@
+<form (ngSubmit)="onSubmit()">
+<mat-card>
+  <mat-card-title>New request</mat-card-title>
+  <mat-card-content>
+    <mat-card>
+      <mat-card-title>{{bookUser.title}}</mat-card-title>
+      <mat-card-content>              
+        <h3>{{bookUser.description}}</h3>    
+        <h5>from {{bookUser.username}}</h5>        
+      </mat-card-content>  
+    </mat-card>
+    <mat-card>
+      <mat-card-title>{{book.title}}</mat-card-title>
+      <mat-card-content>              
+        <h3>{{book.description}}</h3>    
+        <h5>from {{book.username}}</h5>        
+      </mat-card-content>  
+    </mat-card>
+    <button type="submit" mat-raised-button color="primary">Submit request</button>
+  </mat-card-content>
+</mat-card>
+</form>

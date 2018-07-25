@@ -2,27 +2,27 @@
 <app-booklist [dataSource]="dataSourceUser" cardTitle="User books"></app-booklist>
 <app-booklist [dataSource]="dataSource" cardTitle="Books from other users" *ngIf="!parentUserName"></app-booklist>
 -->
-<form #bookForm="ngForm">
+<form #bookForm="ngForm" (ngSubmit)="onSubmit()">
 <mat-card class="book-list">
-  <mat-card *ngFor="let book of books" class="book">
-    <mat-card-title>{{book.titile}}</mat-card-title>
-    <mat-card-content>
-      <mat-checkbox value="{{book.id}}" (click)="toggleCheck(book,!spy.checked)" [disabled]="book.disabled" #spy>{{book.title}}</mat-checkbox>
+  <mat-card *ngFor="let book of books; let i = index" class="book">
+    <mat-card-title>{{book.title}}</mat-card-title>
+    <mat-card-content>      
+      <mat-checkbox *ngIf="!book.disabled" (click)="toggleCheck(i,!spy.checked)" #spy>{{book.title}}</mat-checkbox>      
+      <mat-checkbox *ngIf="book.disabled" [disabled]="true">{{book.title}}</mat-checkbox>      
       <h3>{{book.description}}</h3>    
       <h5>from {{book.username}}</h5>
       <button *ngIf="book.username == username" (click)="deleteBook(book.id)" class="delete-btn">        
         <mat-icon color="warn" >delete</mat-icon>  
-      </button>            
-      {{spy.checked}}
+      </button>                  
     </mat-card-content>  
   </mat-card>  
 </mat-card>
-</form>
 <mat-card *ngIf="!parentUserName">
   <button mat-raised-button 
-    color="primary" 
-    routerLink="/addbook" 
+    type="submit"
+    color="primary"     
     *ngIf="!parentUserName"      
     [disabled]="requesButtonDisabled">New request</button>    
   <button mat-raised-button routerLink="/addbook" *ngIf="!parentUserName">Add book</button>  
 </mat-card>
+</form>

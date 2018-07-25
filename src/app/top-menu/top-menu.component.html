@@ -1,14 +1,11 @@
 <mat-card class="top-menu">
   Book Exchange
-
-<button mat-button [matMenuTriggerFor]="menu">Menu</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item routerLink="/books">All books</button>
-  <button mat-menu-item routerLink="/addbook">My books</button>  
-</mat-menu>
-
-  
-  <button mat-button>Request</button>
+  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/books">All books</button>
+    <button mat-menu-item routerLink="/addbook">My books</button>  
+  </mat-menu> 
+  <button mat-button routerLink="/requests">Request</button>
   <button mat-button>Trades</button>
   <button mat-button routerLink="/users">Users</button>
   <button mat-button routerLink="/name">Login</button>
