@@ -1,3 +1,21 @@
-<p>
-  requests works!
-</p>
+<mat-card>
+  <mat-card-title>Requests</mat-card-title>  
+  <mat-card-content class="flex-content" *ngFor="let request of requests">    
+    <mat-divider></mat-divider>
+    <mat-card class="card">
+      <mat-card-title>{{request.bookFrom.title}}</mat-card-title>
+      <mat-card-content>              
+        <h3>{{request.bookFrom.description}}</h3>    
+        <h5>from {{request.usernameFrom}} requested on {{request.date | date}}</h5>        
+      </mat-card-content>  
+    </mat-card>
+    <mat-card class="card">
+      <mat-card-title>{{request.bookTo.title}}</mat-card-title>
+      <mat-card-content>              
+        <h3>{{request.bookTo.description}}</h3>    
+        <h5>from {{request.usernameTo}} </h5>        
+      </mat-card-content>  
+    </mat-card>    
+    <mat-divider></mat-divider>
+  </mat-card-content>  
+</mat-card>

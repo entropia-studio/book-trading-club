@@ -1,0 +1,12 @@
+.flex-content{
+    display: flex;    
+    flex-wrap: wrap;      
+    justify-content: space-between;
+    
+}
+
+.card{
+    width: 45%;
+    margin-top: 1.2em;    
+}
+

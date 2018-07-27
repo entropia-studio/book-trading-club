@@ -1,7 +1,3 @@
-table {
-    width: 100%;
-}
-
 button{  
   margin-right: 1em;
 }
@@ -15,7 +11,8 @@ button{
 }
 .book-list{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 .delete-btn{
   margin: 0px;
@@ -24,3 +21,8 @@ button{
   background-color: transparent;
   border: 0px;
 }
+.card-buttons{
+  display: flex;    
+  justify-content: flex-end;
+}
+

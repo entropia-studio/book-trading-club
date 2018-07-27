@@ -1,13 +1,14 @@
 .top-menu{
+    display: flex;
     font-size: 1em;    
+    margin-bottom: 0.5em;
+    align-items: center;
+    align-content: center;    
 }
 
-.top-menu button:first-child {
-    margin-left: 2em;
+h3{
+    margin-right: 2em;   
+    margin-bottom: 0px;
 }
 
-.top-menu button:last-child {
-    align-content: flex-end;
-    align-items: flex-end;
-    align-self: flex-end;   
-}
+

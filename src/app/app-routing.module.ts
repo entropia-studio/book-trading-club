@@ -5,7 +5,8 @@ import {AddbookComponent} from './addbook/addbook.component';
 import {RequestnewComponent} from './requestnew/requestnew.component';
 import {RequestsComponent} from './requests/requests.component';
 import {UsersComponent} from './users/users.component';
-import {NameEditorComponent} from './name-editor/name-editor.component';
+import { LoginComponent } from './login/login.component';
+
 
 
 
@@ -16,7 +17,7 @@ const routes: Routes = [
   { path: 'requests' , component: RequestsComponent},
   { path: 'request/new' , component: RequestnewComponent},  
   { path: 'users' , component: UsersComponent},
-  { path: 'name' , component: NameEditorComponent}
+  { path: 'login' , component: LoginComponent}
 ]
 
 @NgModule({

@@ -1,6 +1,6 @@
 <mat-card class="top-menu">
-  Book Exchange
-  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+  <h3>Book Exchange</h3>  
+  <button mat-button [matMenuTriggerFor]="menu"><mat-icon color="accent" >menu</mat-icon> Menu</button>  
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/books">All books</button>
     <button mat-menu-item routerLink="/addbook">My books</button>  
@@ -8,5 +8,12 @@
   <button mat-button routerLink="/requests">Request</button>
   <button mat-button>Trades</button>
   <button mat-button routerLink="/users">Users</button>
-  <button mat-button routerLink="/name">Login</button>
+  <button mat-button (click)="loginGoogle()" *ngIf="!userIsLogged">Login</button>
+  <button mat-button [matMenuTriggerFor]="menuUser" *ngIf="userIsLogged"><mat-icon color="accent" >account_box</mat-icon> {{user.username}}</button>
+  <mat-menu #menuUser="matMenu">
+    <button mat-menu-item routerLink="/books">Profile</button>
+    <button mat-menu-item routerLink="/addbook">My books</button>  
+    <button mat-menu-item (click)="logOut()">Logout</button>  
+  </mat-menu> 
+  <button mat-menu-item (click)="logOut()">Logout</button> 
 </mat-card>

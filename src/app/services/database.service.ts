@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable,throwError,of} from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import {Book} from '../interfaces/book';
+import {Request} from '../interfaces/request';
+import {User} from '../interfaces/user';
 import { AngularFirestore,AngularFirestoreCollection } from 'angularfire2/firestore';
 
 
@@ -11,6 +13,8 @@ import { AngularFirestore,AngularFirestoreCollection } from 'angularfire2/firest
 export class DatabaseService {
   
   private booksCollection: AngularFirestoreCollection<Book>;
+  private requestsCollection: AngularFirestoreCollection<Request>;
+  private usersCollection: AngularFirestoreCollection<User>;
   books: Observable<Book[]>;
   booksRequest: Book[];
 
@@ -31,6 +35,12 @@ export class DatabaseService {
     return this.books;    
   }
 
+  getRequests = ():Observable<Request[]> => {        
+    this.requestsCollection = this.afs.collection<Request>
+      ('requests',ref => ref.where('status','==','pending').orderBy('date','asc'));    
+    return this.requestsCollection.valueChanges();    
+  }
+
   getUsers = ():Observable<any[]> => {    
     return this.afs.collection('/users').valueChanges();
   }
@@ -42,25 +52,56 @@ export class DatabaseService {
   addBook = (book: Book): void => {   
     this.booksCollection = this.afs.collection<Book>('books');
     this.booksCollection.add(book).then(() => {
-      console.log('Book added',book)
+      
+      console.log('Book added',book);
     }).catch(error => {
       console.error("error",error);
     });
+  }
+
+  addUser = (user: User): User => {
+    console.log('id',user.id);
+    let userObs: Observable<User[]>;
+    // Search the user by ID
+    this.usersCollection = this.afs.collection<User>('users',ref => ref.where('id','==',user.id));
+    
+    userObs = this.usersCollection.valueChanges();
+    userObs.subscribe(mUser => {
+      if (mUser.length === 0){
+        this.usersCollection.add(user).then(() => {      
+          console.log('User added',user);
+        }).catch(error => {
+          console.error("error",error);
+        });
+      }      
+    })
+    return user;    
   }
 
   
   deleteBook = (id: string): Promise<void> => {
     this.booksCollection = this.afs.collection<Book>('books');
     return this.booksCollection.doc(id).delete();
+  }  
+  
+  // Returns request document to insert into collection
+  getRequest = (): Request => {
+    let bookFrom, bookTo: Book;
+    bookFrom = this.getBookRequestFrom();
+    bookTo = this.getBookRequestTo();
+    let request: Request = {
+      usernameFrom: bookFrom.username,
+      usernameTo: bookTo.username,
+      status: 'pending',
+      bookFrom: this.sanitizeBook(bookFrom),
+      bookTo: this.sanitizeBook(bookTo),
+      date: Date.now()
+    }
+    return request;
   }
 
-  setRequestBooks = (books: Book[]): void => {
-    this.booksRequest = books;
-    console.log("booksRequest",this.booksRequest);
-  } 
-  
   // Returns the book selected for the request that belongs to the user
-  getBookRequestUser = (): Book => {
+  getBookRequestFrom = (): Book => {
     var mBook = this.booksRequest.filter(book => {
       return book.disabled !== true && book.username === this.getUsername();
     });
@@ -68,12 +109,32 @@ export class DatabaseService {
   }  
 
   // Returns the book selected for the request that not belongs to the user
-  getBookRequest = (): Book => {
+  getBookRequestTo = (): Book => {
     var mBook = this.booksRequest.filter(book => {
       return book.disabled !== true && book.username !== this.getUsername();
     });
     return mBook[0];
-  }  
+  }
+
+  // Sanitize the book object to insert into document
+  sanitizeBook = (book: Book): Book => {
+    book = {
+        id: book.id,
+        title: book.title,
+        description: book.description,        
+    }
+    return book;
+  }
+  
+  createRequest(request: Request): void{
+    this.requestsCollection = this.afs.collection<Request>('requests');
+    
+    this.requestsCollection.add(request).then(() => {
+      console.log('Request added',request)
+    }).catch(error => {
+      console.error("error",error);
+    });
+  }
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

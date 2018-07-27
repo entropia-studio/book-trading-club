@@ -66,6 +66,11 @@ export class BooksComponent implements OnInit {
           username: book.username,
           disabled: false
         })
+        if (this.parentUserName && this.parentUserName !== book.username){
+          console.log(book);
+          this.books.pop();
+        }
+        
       })
 
       console.log('1st books: ',this.books);
@@ -123,8 +128,10 @@ export class BooksComponent implements OnInit {
   }
 
   onSubmit():void{
-    this.dataBaseService.setRequestBooks(this.books);
-    //this.router.navigateByUrl('/request/new');
+    this.dataBaseService.booksRequest = this.books;
+    this.router.navigateByUrl('/request/new');
   }
+
+  
 
 }

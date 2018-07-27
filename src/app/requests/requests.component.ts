@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {DatabaseService} from '../services/database.service';
+import {Request} from '../interfaces/request';
 
 @Component({
   selector: 'app-requests',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RequestsComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private databaseService: DatabaseService) { }
+  requests: Request[];
+  
   ngOnInit() {
+    this.databaseService.getRequests().subscribe(requests => {
+      this.requests = requests;
+    })
   }
 
 }

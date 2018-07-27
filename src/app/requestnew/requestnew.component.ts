@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DatabaseService} from '../services/database.service';
-import {Book} from '../interfaces/book';
+import {Request} from '../interfaces/request';
 import {Router} from '@angular/router';
 
 @Component({
@@ -10,17 +10,18 @@ import {Router} from '@angular/router';
 })
 export class RequestnewComponent implements OnInit {
 
+  request: Request;
+
   constructor(    
     private dataBaseService: DatabaseService,
     private router: Router) {} 
-
-  bookUser: Book;
-  book: Book;
     
-  ngOnInit() {    
-    console.log('books',this.dataBaseService.booksRequest);
-    this.bookUser = this.dataBaseService.getBookRequestUser();
-    this.book = this.dataBaseService.getBookRequest();
+  ngOnInit() {        
+    this.request = this.dataBaseService.getRequest();
+  }
+
+  acceptRequest(){    
+    this.dataBaseService.createRequest(this.request);
   }
 
 }

@@ -17,12 +17,12 @@
     </mat-card-content>  
   </mat-card>  
 </mat-card>
-<mat-card *ngIf="!parentUserName">
+<mat-card *ngIf="!parentUserName" class="card-buttons">
+  <button mat-raised-button routerLink="/addbook" *ngIf="!parentUserName">Add book</button>  
   <button mat-raised-button 
     type="submit"
-    color="primary"     
+    color="accent"     
     *ngIf="!parentUserName"      
-    [disabled]="requesButtonDisabled">New request</button>    
-  <button mat-raised-button routerLink="/addbook" *ngIf="!parentUserName">Add book</button>  
+    [disabled]="requesButtonDisabled">New request</button>      
 </mat-card>
 </form>
