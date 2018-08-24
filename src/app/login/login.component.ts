@@ -1,32 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { User } from '../interfaces/user';
-
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit {  
 
-  user: User;
+  constructor(
+    private authService: AuthService,
+    private router: Router) {}
 
-  constructor(private authService: AuthService) {}
-
-  ngOnInit() {
-    /*
-    this.authService.googleLogin().then(value => {
-      this.user = {
-        id: value.additionalUserInfo.id,
-        username: value.additionalUserInfo.id,
-
-      };
-    });
-    */
+  ngOnInit() {   
   }
 
-  logOut(){
-    this.authService.logout();
+  loginGoogle(){
+    this.authService.googleLogin().then(() => {                  
+      this.router.navigate(['books']);      
+    });    
   }
+  
+ 
+
 }

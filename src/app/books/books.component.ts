@@ -2,7 +2,9 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource, MatSort} from '@angular/material';
 import {DatabaseService} from '../services/database.service';
+import {AuthService} from '../services/auth.service';
 import {Book} from '../interfaces/book';
+import {User} from '../interfaces/user';
 import {Router} from '@angular/router';
 
 
@@ -16,41 +18,22 @@ import {Router} from '@angular/router';
 export class BooksComponent implements OnInit {  
 
   @Input() parentUserName: string;
-  @ViewChild(MatSort) sort: MatSort;
+  
 
   books: Book[];
+  user: User;
   username: string;  
   requesButtonDisabled: boolean = true;
 
   constructor(    
     private dataBaseService: DatabaseService,
-    private router: Router) {} 
-  
+    private authService: AuthService,
+    private router: Router) {}   
 
-  displayedColumns: string[] = ['select', 'title', 'description', 'username'];    
-  dataSource = new MatTableDataSource<Book>();
-  selection = new SelectionModel<Book>(true, []);
-
-  dataSourceUser = new MatTableDataSource<Book>();
-  selectionUser = new SelectionModel<Book>(true, []);
-  
-    
-  /** Whether the number of selected elements matches the total number of rows. */ 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */ 
-  masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
-  }  
-
-  ngOnInit() {    
-      this.username = this.dataBaseService.getUsername();
+  ngOnInit() {          
+      this.user = this.authService.user;
+      this.dataBaseService.user = this.user;
+      console.log('Books.js user: ',this.user.username);
       this.getBooks();
   }
 
@@ -65,7 +48,8 @@ export class BooksComponent implements OnInit {
           description: book.description,
           username: book.username,
           disabled: false
-        })
+        });
+
         if (this.parentUserName && this.parentUserName !== book.username){
           console.log(book);
           this.books.pop();
@@ -73,22 +57,23 @@ export class BooksComponent implements OnInit {
         
       })
 
-      console.log('1st books: ',this.books);
+      //console.log('1st books: ',this.books);
       //this.books = books;
       // Add book component only shows the user books
+      /*
       if (this.parentUserName){       
         this.dataSourceUser.data = books.filter(book => {
           return book.username == this.parentUserName;
         });
       }else{
         this.dataSourceUser.data = books.filter(book => {
-          return book.username == this.dataBaseService.getUsername();
+          return book.username == this.user.username;
         });
         this.dataSource.data = books.filter(book => {
-          return book.username !== this.dataBaseService.getUsername();
+          return book.username !== this.user.username;
         });  
       }         
-    
+      */
     })      
   }
 
@@ -105,10 +90,10 @@ export class BooksComponent implements OnInit {
     var booksChecked: number = 0;
     this.books.map((book,i) => {      
       if (checked){        
-        if (username === this.username){
+        if (username === this.user.username){
           this.books[i].disabled = i !== index && book.username === username ? true :  book.disabled;                            
         }else{
-          this.books[i].disabled = i !== index && book.username !== this.username ? true :  book.disabled;                
+          this.books[i].disabled = i !== index && book.username !== this.user.username ? true :  book.disabled;                
         }                  
       }else{
         if (username === this.username){
@@ -129,7 +114,8 @@ export class BooksComponent implements OnInit {
 
   onSubmit():void{
     this.dataBaseService.booksRequest = this.books;
-    this.router.navigateByUrl('/request/new');
+    //console.log('this.books',this.books)    
+    this.router.navigate(['request/new']);
   }
 
   

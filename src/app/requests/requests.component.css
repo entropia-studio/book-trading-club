@@ -10,3 +10,12 @@
     margin-top: 1.2em;    
 }
 
+.card-buttons{
+    display: flex;    
+    justify-content: flex-end;
+    width: 100%;
+  }
+  
+  .mat-raised-button{  
+    margin-left: 1em;    
+  }

@@ -11,6 +11,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatBadgeModule} from '@angular/material/badge';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TopMenuComponent } from './top-menu/top-menu.component';
 import { BooksComponent } from './books/books.component';
@@ -28,8 +30,7 @@ import { RequestnewComponent } from './requestnew/requestnew.component';
 import { RequestsComponent } from './requests/requests.component';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth.service';
-
-
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { AuthService } from './services/auth.service';
     BooklistComponent,
     RequestnewComponent,
     RequestsComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent,    
   ],
   imports: [
     BrowserModule,    
@@ -59,6 +61,8 @@ import { AuthService } from './services/auth.service';
     MatInputModule,
     MatIconModule,
     MatDividerModule,
+    MatSnackBarModule,
+    MatBadgeModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,

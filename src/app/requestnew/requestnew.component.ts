@@ -21,7 +21,9 @@ export class RequestnewComponent implements OnInit {
   }
 
   acceptRequest(){    
-    this.dataBaseService.createRequest(this.request);
+    this.dataBaseService.createRequest(this.request).then(() => {
+      this.router.navigate(['requests']);
+    });
   }
 
 }

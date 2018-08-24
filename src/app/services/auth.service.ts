@@ -6,6 +6,8 @@ import {Observable} from 'rxjs';
 //import 'rxjs/add/operator/switchMap';
 import { User } from '../interfaces/user';
 import { DatabaseService } from './database.service';
+import { Subject } from 'rxjs';
+import { nextTick } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +18,66 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private router: Router,
     private databaseService: DatabaseService
-  ) { }
+  ) {}
+
+  // Communication with the menu
+  private navStateSource = new Subject<User>();
+  navState$ = this.navStateSource.asObservable();
   
-  user: User;
+  user: User = this.getUser();
+
+  users: User[] = [
+    {
+      id: '109061927218808238481',
+      username: 'Portear Kayaks',
+      fullname: 'Portear',
+      city: '',
+      state: '',
+      email: 'portearkayaks@gmail.com',
+      books: 0
+    },
+    {
+      id: '113590481568941463362',
+      username: 'Entropia Studio',
+      fullname: 'Entropia',
+      city: 'Paterna',
+      state: 'Valencia',
+      email: 'info@entropia.studio',
+      books: 0
+    },
+
+]
+
+  getUser (): User{
+    /*
+    return {
+      id: '',
+      username: '',      
+      fullname: '',
+      city: '',
+      state: ''
+    }
+    */   
+    return {
+      id: '113590481568941463362',
+      username: 'Entropia Studio',
+      fullname: 'Entropia',
+      city: 'Paterna',
+      state: 'Valencia',
+      email: 'info@entropia.studio',
+      books: 0
+    };
+  }
+
+  /*
+  user: User = {
+    id: '113590481568941463362',
+    username: 'Entropia Studio',      
+    fullname: 'Entropia',
+    city: 'city bar',
+    state: 'state bar'
+  };
+  */
 
   login(email: string, password: string) {
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
@@ -43,16 +102,29 @@ export class AuthService {
   googleLogin(): Promise<void> {
     
     const provider = new firebase.auth.GoogleAuthProvider();
-    return this.oAuthLogin(provider).then(value => {      
+    
+    return this.oAuthLogin(provider).then(oAuthLoginObj => {                 
+
       this.user = {
-        id: value.additionalUserInfo.profile.id,
-        username: value.additionalUserInfo.profile.name,
-        fullname: value.additionalUserInfo.profile.given_name,
-        email: value.additionalUserInfo.profile.email,
+        id: oAuthLoginObj.additionalUserInfo.profile['id'],
+        username: oAuthLoginObj.additionalUserInfo.profile['name'],
+        fullname: oAuthLoginObj.additionalUserInfo.profile['given_name'],
+        email: oAuthLoginObj.additionalUserInfo.profile['email'],
         books: 0
       };
-      this.databaseService.addUser(this.user);      
 
+      var id = oAuthLoginObj.additionalUserInfo.profile['id'];
+
+      this.databaseService.getUser(id).subscribe(user => {
+        console.log('user',user);
+        // User doesn't exist in collection
+        if (user.length === 0){          
+          this.databaseService.addUser(this.user);
+        }else{
+          this.user = user[0];
+        }
+        this.navStateSource.next(this.user);         
+      })             
     }).catch(error => {
         console.log('Something went wrong: ', error);
     });      
@@ -60,8 +132,11 @@ export class AuthService {
 
   logout() {
     this.afAuth.auth.signOut().then(() => {
-      this.router.navigate(['/']);
+      this.router.navigate(['login']);
     });
+
+    this.user = this.getUser();
+    this.navStateSource.next(this.user); 
   }
   private oAuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider);

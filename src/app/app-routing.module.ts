@@ -6,6 +6,7 @@ import {RequestnewComponent} from './requestnew/requestnew.component';
 import {RequestsComponent} from './requests/requests.component';
 import {UsersComponent} from './users/users.component';
 import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
@@ -16,8 +17,11 @@ const routes: Routes = [
   { path: 'addbook' , component: AddbookComponent},
   { path: 'requests' , component: RequestsComponent},
   { path: 'request/new' , component: RequestnewComponent},  
+  { path: 'requests/incoming' , component: RequestsComponent},  
+  { path: 'trades' , component: RequestsComponent},  
   { path: 'users' , component: UsersComponent},
-  { path: 'login' , component: LoginComponent}
+  { path: 'login' , component: LoginComponent},
+  { path: 'profile' , component: ProfileComponent}
 ]
 
 @NgModule({

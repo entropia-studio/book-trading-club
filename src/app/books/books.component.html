@@ -5,24 +5,32 @@
 <form #bookForm="ngForm" (ngSubmit)="onSubmit()">
 <mat-card class="book-list">
   <mat-card *ngFor="let book of books; let i = index" class="book">
-    <mat-card-title>{{book.title}}</mat-card-title>
-    <mat-card-content>      
-      <mat-checkbox *ngIf="!book.disabled" (click)="toggleCheck(i,!spy.checked)" #spy>{{book.title}}</mat-checkbox>      
-      <mat-checkbox *ngIf="book.disabled" [disabled]="true">{{book.title}}</mat-checkbox>      
+    <mat-card-title>
+      {{book.title}}       
+    </mat-card-title>
+    <mat-card-content>            
       <h3>{{book.description}}</h3>    
-      <h5>from {{book.username}}</h5>
-      <button *ngIf="book.username == username" (click)="deleteBook(book.id)" class="delete-btn">        
-        <mat-icon color="warn" >delete</mat-icon>  
-      </button>                  
+      <mat-checkbox *ngIf="!book.disabled && user.username" (click)="toggleCheck(i,!spy.checked)" #spy> from {{book.username}}</mat-checkbox>      
+      <mat-checkbox *ngIf="book.disabled" [disabled]="true">from {{book.username}}</mat-checkbox>                                   
     </mat-card-content>  
+    <mat-card-actions *ngIf="book.username == user.username" style="text-align: right">
+        <button  (click)="deleteBook(book.id)" class="delete-btn">        
+            <mat-icon color="warn" >delete</mat-icon>  
+        </button>
+    </mat-card-actions>
   </mat-card>  
 </mat-card>
-<mat-card *ngIf="!parentUserName" class="card-buttons">
-  <button mat-raised-button routerLink="/addbook" *ngIf="!parentUserName">Add book</button>  
+<mat-card *ngIf="!parentUserName && user.username" class="card-buttons">
+  <button mat-raised-button routerLink="/addbook">Add book</button>  
   <button mat-raised-button 
     type="submit"
     color="accent"     
     *ngIf="!parentUserName"      
     [disabled]="requesButtonDisabled">New request</button>      
 </mat-card>
+
+<mat-card *ngIf="!user.username" class="card-buttons">
+  <button mat-raised-button routerLink="/login">Log to add and request books</button>       
+</mat-card>
+
 </form>

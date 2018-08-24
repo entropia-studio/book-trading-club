@@ -3,17 +3,21 @@
   <button mat-button [matMenuTriggerFor]="menu"><mat-icon color="accent" >menu</mat-icon> Menu</button>  
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/books">All books</button>
-    <button mat-menu-item routerLink="/addbook">My books</button>  
-  </mat-menu> 
-  <button mat-button routerLink="/requests">Request</button>
-  <button mat-button>Trades</button>
+    <button mat-menu-item routerLink="/addbook" *ngIf="user.username">My books</button>  
+  </mat-menu>   
+  <button mat-button [matMenuTriggerFor]="menuRequest" *ngIf="numOfRequests > 0" matBadge="{{numOfRequests}}" matBadgePosition="after" matBadgeSize="small"  matBadgeColor="warn" [matBadgeHidden]="visible">Requests</button>
+  <mat-menu #menuRequest="matMenu">    
+    <button mat-menu-item routerLink="/requests">All requests</button>    
+    <button mat-menu-item routerLink="/requests/incoming">Incoming requests ({{numOfRequests}})</button>
+  </mat-menu>  
+  <button mat-button routerLink="/requests" *ngIf="numOfRequests == 0">Requests</button>    
+  <button mat-button routerLink="/trades">Trades</button>
   <button mat-button routerLink="/users">Users</button>
-  <button mat-button (click)="loginGoogle()" *ngIf="!userIsLogged">Login</button>
-  <button mat-button [matMenuTriggerFor]="menuUser" *ngIf="userIsLogged"><mat-icon color="accent" >account_box</mat-icon> {{user.username}}</button>
+  <button mat-button routerLink="/login" *ngIf="!user.username">Login</button>
+  <button mat-button [matMenuTriggerFor]="menuUser" *ngIf="user.username"><mat-icon color="accent" >account_box</mat-icon> {{user.username}}</button>
   <mat-menu #menuUser="matMenu">
-    <button mat-menu-item routerLink="/books">Profile</button>
+    <button mat-menu-item routerLink="/profile">Profile</button>
     <button mat-menu-item routerLink="/addbook">My books</button>  
     <button mat-menu-item (click)="logOut()">Logout</button>  
-  </mat-menu> 
-  <button mat-menu-item (click)="logOut()">Logout</button> 
+  </mat-menu>   
 </mat-card>

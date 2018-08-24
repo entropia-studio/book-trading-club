@@ -38,7 +38,7 @@ export class BooklistComponent implements OnInit {
   }  
 
   ngOnInit() {
-    this.username = this.dataBaseService.getUsername();
+    //this.username = this.dataBaseService.getUsername();
   }
 
   deleteBook(bookId: string):void {    

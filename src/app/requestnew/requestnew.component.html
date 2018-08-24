@@ -1,22 +1,24 @@
 <mat-card>
   <mat-card-title>New request</mat-card-title>  
-  <mat-card-content class="flex-content">
-    <mat-card class="card">
-      <mat-card-title>{{request.bookFrom.title}}</mat-card-title>
-      <mat-card-content>              
-        <h3>{{request.bookFrom.description}}</h3>    
-        <h5>from {{request.bookFrom.username}}</h5>        
-      </mat-card-content>  
-    </mat-card>
-    <mat-card class="card">
-      <mat-card-title>{{request.bookTo.title}}</mat-card-title>
-      <mat-card-content>              
-        <h3>{{request.bookTo.description}}</h3>    
-        <h5>from {{request.bookTo.username}}</h5>        
-      </mat-card-content>  
-    </mat-card>
+  <mat-card-content >
+    <div class="flex-content">
+      <mat-card class="card">
+        <mat-card-title>{{request.bookFrom.title}}</mat-card-title>
+        <mat-card-content>              
+          <h3>{{request.bookFrom.description}}</h3>    
+          <h5>from {{request.bookFrom.username}}</h5>        
+        </mat-card-content>          
+      </mat-card>
+      <mat-card class="card">
+        <mat-card-title>{{request.bookTo.title}}</mat-card-title>
+        <mat-card-content>              
+          <h3>{{request.bookTo.description}}</h3>    
+          <h5>from {{request.bookTo.username}}</h5>        
+        </mat-card-content>  
+      </mat-card>
+    </div>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="acceptRequest()" >Accept request</button>
+      <button mat-raised-button color="accent" type="submit" (click)="acceptRequest()" >Accept request</button>
     </mat-card-actions>
   </mat-card-content>  
 </mat-card>

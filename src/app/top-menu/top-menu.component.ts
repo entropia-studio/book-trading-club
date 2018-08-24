@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { DatabaseService } from '../services/database.service';
 import { User } from '../interfaces/user';
+
 
 @Component({
   selector: 'app-top-menu',
@@ -9,23 +11,24 @@ import { User } from '../interfaces/user';
 })
 export class TopMenuComponent implements OnInit {
   
-  constructor(private authService: AuthService) { }
-  user: User;
-  userIsLogged: boolean = true;
+  constructor(
+    private authService: AuthService,
+    private databaseService: DatabaseService,
+    ) { }
+
+  user: User = this.authService.user;  
+  numOfRequests: number = 0;
 
   ngOnInit() {
+    this.authService.navState$.subscribe( (user)=> this.user = user);     
+    this.databaseService.getUserRequests(this.user.username).subscribe(requests => {
+      this.numOfRequests = requests.length;      
+    });
   }
 
-  loginGoogle(){
-    this.authService.googleLogin().then(() => {      
-      this.user = this.authService.user;      
-      this.userIsLogged = true;
-    });    
+  logOut(){    
+    this.authService.logout();    
   }
   
-  logOut(){
-    this.authService.logout();
-    this.userIsLogged = false;
-  }
 
 }

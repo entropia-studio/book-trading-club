@@ -6,5 +6,6 @@ export interface Request {
     status: string,
     usernameFrom: string,
     usernameTo:string,
-    date: number
+    date: number;
+    id?: string;
 }
