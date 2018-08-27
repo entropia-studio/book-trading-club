@@ -8,8 +8,8 @@
         <h3>{{request.bookFrom.description}}</h3>    
         <h5>from {{request.usernameFrom}} requested on {{request.date | date}}</h5>        
       </mat-card-content>
-      <mat-card-actions *ngIf="request.usernameFrom == user.username" style="text-align: right">
-        <button  (click)="deleteRequest(request.id)" class="delete-btn">        
+      <mat-card-actions *ngIf="user" style="text-align: right">
+        <button  (click)="deleteRequest(request)" class="delete-btn" *ngIf="request.usernameFrom == user.username && request.status =='pending'">        
             <mat-icon color="warn" >delete</mat-icon>  
         </button>
      </mat-card-actions>  

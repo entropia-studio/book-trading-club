@@ -52,6 +52,7 @@ export class RequestsComponent implements OnInit {
     request.status = 'reject';
     this.databaseService.setRequest(request).then(requests => {      
       this.requests = requests;
+      this.updateIncomingUser(request);  
     })
   }
 
@@ -59,14 +60,25 @@ export class RequestsComponent implements OnInit {
     request.status = 'trade';
     this.databaseService.setRequest(request).then(requests => {      
       this.requests = requests;
+      this.updateIncomingUser(request);      
     })  
     this.router.navigate(['trades']);
   }
 
-  deleteRequest(idRequest: string){
-    this.databaseService.deleteRequest(idRequest).subscribe(requests => {      
-      this.requests = requests;
+  deleteRequest(request: Request){
+    this.databaseService.deleteRequest(request.id).subscribe(requests => {      
+      this.requests = requests;      
+      this.updateIncomingUser(request);
     })
+  }
+
+  // In all the cases we subtract incoming number to the user
+  updateIncomingUser(request:Request){
+    let observable = this.databaseService.getUser(request.bookTo.user_id).subscribe(user => {      
+      user[0].incoming--;        
+      observable.unsubscribe();
+      this.databaseService.updateUser(user[0]).then()
+    })   
   }
 
 

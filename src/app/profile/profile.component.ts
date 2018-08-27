@@ -22,9 +22,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authService.user;
-  }
-
-  
+  }  
 
   userForm = new FormGroup({
     fullname: new FormControl(this.user.fullname, [
@@ -40,14 +38,12 @@ export class ProfileComponent implements OnInit {
   });
 
   onSubmit(formDirective: FormGroupDirective) {   
-    let user:User = {
-      id: this.user.id,
-      username: this.user.username,      
-      fullname: this.userForm.get('fullname').value,
-      city: this.userForm.get('city').value,
-      state: this.userForm.get('state').value
-    }
-    this.dataBaseService.updateUser(user).then(() => {            
+        
+    this.user.fullname = this.userForm.get('fullname').value;
+    this.user.city = this.userForm.get('city').value;
+    this.user.state = this.userForm.get('state').value;      
+    
+    this.dataBaseService.updateUser(this.user).then(() => {            
       this.openSnackBar('Profile updated succesfully','Ok')
     }); 
   }

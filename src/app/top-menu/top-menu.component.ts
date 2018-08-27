@@ -19,16 +19,23 @@ export class TopMenuComponent implements OnInit {
   user: User = this.authService.user;  
   numOfRequests: number = 0;
 
-  ngOnInit() {
-    this.authService.navState$.subscribe( (user)=> this.user = user);     
-    this.databaseService.getUserRequests(this.user.username).subscribe(requests => {
-      this.numOfRequests = requests.length;      
-    });
+  ngOnInit() {    
+    this.authService.navState$.subscribe( (user)=> {
+      this.user = user;
+      if (user){
+        this.databaseService.getUserRequests(this.user.username).subscribe(requests => {        
+          this.numOfRequests = requests.length;      
+        });
+      }      
+    });         
   }
 
   logOut(){    
     this.authService.logout();    
   }
   
+  hasProp(o, name) {
+    return o.hasOwnProperty(name);
+  }
 
 }

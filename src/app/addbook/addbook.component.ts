@@ -46,10 +46,10 @@ export class AddbookComponent implements OnInit {
     let book: Book = {
       title: this.bookForm.get('title').value,
       description: this.bookForm.get('description').value,
-      username: this.authService.user.username
+      username: this.authService.user.username,
+      user_id: this.authService.user.id
     }
-    this.dataBaseService.addBook(book);
-    
+    this.dataBaseService.addBook(book);    
   }
 
   

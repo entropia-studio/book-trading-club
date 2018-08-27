@@ -32,8 +32,7 @@ export class BooksComponent implements OnInit {
 
   ngOnInit() {          
       this.user = this.authService.user;
-      this.dataBaseService.user = this.user;
-      console.log('Books.js user: ',this.user.username);
+      this.dataBaseService.user = this.user;      
       this.getBooks();
   }
 
@@ -44,36 +43,19 @@ export class BooksComponent implements OnInit {
       books.map(book => {
         this.books.push({
           id: book.id,
+          user_id: book.user_id,
           title: book.title,
           description: book.description,
           username: book.username,
           disabled: false
         });
 
-        if (this.parentUserName && this.parentUserName !== book.username){
-          console.log(book);
+        if (this.parentUserName && this.parentUserName !== book.username){          
           this.books.pop();
         }
         
       })
-
-      //console.log('1st books: ',this.books);
-      //this.books = books;
-      // Add book component only shows the user books
-      /*
-      if (this.parentUserName){       
-        this.dataSourceUser.data = books.filter(book => {
-          return book.username == this.parentUserName;
-        });
-      }else{
-        this.dataSourceUser.data = books.filter(book => {
-          return book.username == this.user.username;
-        });
-        this.dataSource.data = books.filter(book => {
-          return book.username !== this.user.username;
-        });  
-      }         
-      */
+      
     })      
   }
 
@@ -113,8 +95,7 @@ export class BooksComponent implements OnInit {
   }
 
   onSubmit():void{
-    this.dataBaseService.booksRequest = this.books;
-    //console.log('this.books',this.books)    
+    this.dataBaseService.booksRequest = this.books;      
     this.router.navigate(['request/new']);
   }
 

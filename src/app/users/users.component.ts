@@ -12,28 +12,15 @@ export class UsersComponent implements OnInit {
 
   constructor(private dataService: DatabaseService) { }
 
-  USER_DATA: User[] = [];
-
-  displayedColumns: string[] = ['id','username', 'fullname','books'];
-  dataSource = new MatTableDataSource<User>(this.USER_DATA);
+  users: User[] = [];  
 
   ngOnInit() {
     this.getUsers();
   }
 
   getUsers():void{
-    this.dataService.getUsers().subscribe(users => {
-      var user_data: any[] = [];
-      users.map(user => {
-        let mUser = {
-          'id': user.id,
-          'username': user.username,
-          'fullname': user.fullname,
-          'books': user.books.length
-          }
-        user_data.push(mUser);
-      })      
-      Object.assign(this.USER_DATA,user_data);
+    this.dataService.getUsers().subscribe(users => {    
+      this.users = users;
     })
   }
 
