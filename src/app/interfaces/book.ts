@@ -4,5 +4,6 @@ export interface Book {
     description: string;
     username?: string;     
     user_id?: string;
-    disabled?: boolean;  
+    disabled?: boolean; 
+    selected?: boolean; 
 }

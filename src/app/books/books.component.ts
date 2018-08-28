@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource, MatSort} from '@angular/material';
+import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import {DatabaseService} from '../services/database.service';
 import {AuthService} from '../services/auth.service';
 import {Book} from '../interfaces/book';
 import {User} from '../interfaces/user';
 import {Router} from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 
 
 
@@ -15,30 +14,31 @@ import {Router} from '@angular/router';
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.css']
 })
-export class BooksComponent implements OnInit {  
+export class BooksComponent implements OnInit, OnDestroy {  
 
-  @Input() parentUserName: string;
-  
+  @Input() parentUserName: string;  
+ 
 
   books: Book[];
   user: User;
   username: string;  
   requesButtonDisabled: boolean = true;
+  booksObs: Subscription;
 
   constructor(    
     private dataBaseService: DatabaseService,
     private authService: AuthService,
-    private router: Router) {}   
+    ) {}   
 
   ngOnInit() {          
       this.user = this.authService.user;
       this.dataBaseService.user = this.user;      
-      this.getBooks();
+      this.booksObs = this.getBooks();
   }
 
-  getBooks(): void {
+  getBooks(): Subscription {
     
-    this.dataBaseService.getBooks().subscribe(books => {                              
+    return this.dataBaseService.getBooks().subscribe(books => {                              
       this.books = [];
       books.map(book => {
         this.books.push({
@@ -47,15 +47,14 @@ export class BooksComponent implements OnInit {
           title: book.title,
           description: book.description,
           username: book.username,
-          disabled: false
+          disabled: false,
+          selected: false
         });
 
         if (this.parentUserName && this.parentUserName !== book.username){          
           this.books.pop();
-        }
-        
-      })
-      
+        }        
+      })      
     })      
   }
 
@@ -68,7 +67,7 @@ export class BooksComponent implements OnInit {
   // to perform a new request
   toggleCheck(index: number, checked: boolean): void{       
     const username: string = this.books[index].username;    
-    // Need to activate the New request button
+    // Needed to activate the New request button
     var booksChecked: number = 0;
     this.books.map((book,i) => {      
       if (checked){        
@@ -76,27 +75,29 @@ export class BooksComponent implements OnInit {
           this.books[i].disabled = i !== index && book.username === username ? true :  book.disabled;                            
         }else{
           this.books[i].disabled = i !== index && book.username !== this.user.username ? true :  book.disabled;                
-        }                  
+        }                    
       }else{
         if (username === this.username){
           this.books[i].disabled = username === book.username ?  false : book.disabled;
         }else{
           this.books[i].disabled = this.username !== book.username ?  false : book.disabled;
-        }        
-      }      
-      // Count the selected books that not belong the username
-      if (book.username !== username && !book.disabled){        
-        booksChecked++;
-      }
-      
+        }                
+      }                  
     })        
+    this.books[index].selected = checked === true ? true : false;  
+    this.books.map(book => {
+      if (book.selected)
+      booksChecked++;
+    })
+    console.log('booksChecked: ',booksChecked)
+    console.log('Books ->',this.books);
     // New request active only if the user has selected one general book and one own book
-    this.requesButtonDisabled = booksChecked === 1 ? false : true;    
+    this.requesButtonDisabled = booksChecked === 2 ? false : true;    
   }
 
-  onSubmit():void{
-    this.dataBaseService.booksRequest = this.books;      
-    this.router.navigate(['request/new']);
+  ngOnDestroy(){
+    this.dataBaseService.booksRequest = this.books;
+    this.booksObs.unsubscribe();    
   }
 
   

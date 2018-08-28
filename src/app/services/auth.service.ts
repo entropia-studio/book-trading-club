@@ -63,17 +63,16 @@ export class AuthService {
       };
 
       var id = oAuthLoginObj.additionalUserInfo.profile['id'];
-
-      this.databaseService.getUser(id).subscribe(user => {
-        console.log('Auth user:',user);
-        // User doesn't exist in collection
-        if (user.length === 0){          
-          this.databaseService.addUser(this.user);
+      
+      this.databaseService.getUser(id).then(user => {
+        
+        // User exists in collection
+        if (user.exists){          
+          this.user = user.data();          
         }else{
-          this.user = user[0];
-          this.user.books = user[0].books;
-          this.user.incoming = user[0].incoming;
+          this.databaseService.addUser(this.user);
         }
+        console.log('Auth user:',this.user);
         this.navStateSource.next(this.user);         
       })             
     }).catch(error => {

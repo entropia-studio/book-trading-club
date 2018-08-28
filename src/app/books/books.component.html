@@ -26,7 +26,7 @@
     type="submit"
     color="accent"     
     *ngIf="!parentUserName"      
-    [disabled]="requesButtonDisabled">New request</button>      
+    [disabled]="requesButtonDisabled" routerLink="/request/new" >New request</button>      
 </mat-card>
 
 <mat-card *ngIf="!user" class="card-buttons">

@@ -4,7 +4,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import {Book} from '../interfaces/book';
 import {Request} from '../interfaces/request';
 import {User} from '../interfaces/user';
-import { AngularFirestore,AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore,AngularFirestoreCollection, AngularFirestoreDocument, DocumentSnapshot } from 'angularfire2/firestore';
 
 
 @Injectable({
@@ -186,12 +186,15 @@ export class DatabaseService {
   }
 
   // Returns the user document if exists, if not returns a empty user object
-  getUser = (id: string) : Observable<User[]> => {
+  getUser = (id: string) : Promise<any> => {
     let userObs: Observable<User[]>;
     // Search the user by ID
     this.usersCollection = this.afs.collection<User>('users',ref => ref.where('id','==',id));
+    
     userObs = this.usersCollection.valueChanges();
-    return userObs;    
+    
+    //return userObs;    
+    return this.afs.collection<User>('users').doc(id).ref.get();
   } 
 
 

@@ -21,13 +21,15 @@ export class RequestnewComponent implements OnInit {
   }
 
   acceptRequest(){    
-    this.dataBaseService.createRequest(this.request).then(() => {      
-      let obs = this.dataBaseService.getUser(this.request.bookTo.user_id).subscribe(user => {        
-        user[0].incoming++;     
-        obs.unsubscribe();
-        this.dataBaseService.updateUser(user[0]).then(() => {
-          this.router.navigate(['requests']);          
-        })
+    this.router.navigate(['requests']); 
+    this.dataBaseService.createRequest(this.request).then(() => {            
+      this.dataBaseService.getUser(this.request.bookTo.user_id).then(doc => {        
+        if (doc.exists){
+          let userTo = doc.data();             
+          userTo.incoming++;
+          console.log('userTo ->',userTo);
+          this.dataBaseService.updateUser(userTo).then();
+        }       
       })  
     });
   }

@@ -74,13 +74,13 @@ export class RequestsComponent implements OnInit {
 
   // In all the cases we subtract incoming number to the user
   updateIncomingUser(request:Request){
-    let observable = this.databaseService.getUser(request.bookTo.user_id).subscribe(user => {      
-      user[0].incoming--;        
-      observable.unsubscribe();
-      this.databaseService.updateUser(user[0]).then()
-    })   
+    this.databaseService.getUser(request.bookTo.user_id).then(doc => {      
+      if (doc.exists){
+        let userTo = doc.data();
+        userTo.incoming--;
+        this.databaseService.updateUser(userTo).then()
+      }    
+    })
   }
-
-
 
 }
