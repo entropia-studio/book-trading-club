@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable,throwError,of} from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
 import {Book} from '../interfaces/book';
 import {Request} from '../interfaces/request';
 import {User} from '../interfaces/user';
-import { AngularFirestore,AngularFirestoreCollection, AngularFirestoreDocument, DocumentSnapshot } from 'angularfire2/firestore';
+import { AngularFirestore,AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 
 
 @Injectable({
@@ -42,8 +42,7 @@ export class DatabaseService {
 
   addBook = (book: Book): void => {   
     this.booksCollection = this.afs.collection<Book>('books');
-    this.booksCollection.add(book).then(() => {      
-      console.log('Book added',book);
+    this.booksCollection.add(book).then(() => {            
       // Add book to the user
       this.user.books++;
       this.setUser(this.user);
@@ -161,8 +160,7 @@ export class DatabaseService {
     return this.afs.collection('/users').valueChanges();
   }    
 
-  addUser = (user: User): void => {
-    console.log('id',user.id);
+  addUser = (user: User): void => {    
     let userObs: Observable<User[]>;
     // Search the user by ID
     this.usersCollection = this.afs.collection<User>('users',ref => ref.where('id','==',user.id));
@@ -171,9 +169,7 @@ export class DatabaseService {
     userObs.subscribe(mUser => {
       // If user never has logged previously add to collection users
       if (mUser.length === 0){
-        this.usersCollection.doc(user.id).set(user).then(() => {      
-          console.log('User added',user);
-        }).catch(error => {
+        this.usersCollection.doc(user.id).set(user).then().catch(error => {
           console.error("error",error);
         });
       }      
@@ -202,20 +198,8 @@ export class DatabaseService {
     this.userDocument = this.afs.collection<User>('users').doc(user.id);
     return this.userDocument.update(user);
   } 
-    
 
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
- 
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
-
-    // Sanitize the book object to insert into document
+  // Sanitize the book object to insert into document
   sanitizeBook = (book: Book): Book => {
     book = {
         id: book.id,

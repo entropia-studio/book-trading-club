@@ -3,8 +3,7 @@ import {DatabaseService} from '../services/database.service';
 import {AuthService} from '../services/auth.service';
 import {Book} from '../interfaces/book';
 import {User} from '../interfaces/user';
-import {Router} from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import {Subscription } from 'rxjs';
 
 
 
@@ -89,8 +88,7 @@ export class BooksComponent implements OnInit, OnDestroy {
       if (book.selected)
       booksChecked++;
     })
-    console.log('booksChecked: ',booksChecked)
-    console.log('Books ->',this.books);
+    
     // New request active only if the user has selected one general book and one own book
     this.requesButtonDisabled = booksChecked === 2 ? false : true;    
   }

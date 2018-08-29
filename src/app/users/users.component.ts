@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
 import {DatabaseService} from '../services/database.service';
 import {User} from '../interfaces/user';
 

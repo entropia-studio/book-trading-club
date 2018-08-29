@@ -1,5 +1,8 @@
-<mat-card>
-  <mat-card-title>{{cardTitle}}</mat-card-title>  
+<mat-card *ngIf="requests">
+  <mat-card-title>{{cardTitle}}</mat-card-title>
+  <mat-card-content *ngIf="requests.length < 1" style="text-transform: uppercase">
+    No {{cardTitle}} found
+  </mat-card-content>  
   <mat-card-content class="flex-content" *ngFor="let request of requests">    
     <mat-divider></mat-divider>
     <mat-card class="card">

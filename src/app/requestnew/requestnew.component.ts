@@ -26,9 +26,10 @@ export class RequestnewComponent implements OnInit {
       this.dataBaseService.getUser(this.request.bookTo.user_id).then(doc => {        
         if (doc.exists){
           let userTo = doc.data();             
-          userTo.incoming++;
-          console.log('userTo ->',userTo);
-          this.dataBaseService.updateUser(userTo).then();
+          userTo.incoming++;          
+          this.dataBaseService.updateUser(userTo).then(() => {
+            console.log('Incoming updated');
+          });
         }       
       })  
     });

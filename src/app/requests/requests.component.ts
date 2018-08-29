@@ -50,19 +50,17 @@ export class RequestsComponent implements OnInit {
 
   rejectRequest(request: Request){    
     request.status = 'reject';
-    this.databaseService.setRequest(request).then(requests => {      
-      this.requests = requests;
+    this.databaseService.setRequest(request).then(() => {            
       this.updateIncomingUser(request);  
     })
   }
 
   acceptRequest(request: Request){
     request.status = 'trade';
-    this.databaseService.setRequest(request).then(requests => {      
-      this.requests = requests;
-      this.updateIncomingUser(request);      
-    })  
     this.router.navigate(['trades']);
+    this.databaseService.setRequest(request).then(() => {            
+      this.updateIncomingUser(request);      
+    })      
   }
 
   deleteRequest(request: Request){

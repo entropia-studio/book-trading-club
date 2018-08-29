@@ -4,14 +4,15 @@ button{
 
 .mat-card{
   margin-top: 0.5em;
+  margin-right: 1em; 
 }
 
 .book{
-  width: 200px;
+  width: 15%;  
 }
 .book-list{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between;  
   flex-wrap: wrap;
 }
 .delete-btn{

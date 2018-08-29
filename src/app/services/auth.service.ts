@@ -2,12 +2,10 @@ import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import * as firebase from 'firebase';
-import {Observable} from 'rxjs';
 //import 'rxjs/add/operator/switchMap';
 import { User } from '../interfaces/user';
 import { DatabaseService } from './database.service';
 import { Subject } from 'rxjs';
-import { nextTick } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +28,7 @@ export class AuthService {
   login(email: string, password: string) {
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then(value => {
-        console.log('Nice, it worked!');
+        console.log('Sucess', value);
         this.router.navigateByUrl('/profile');
       })
       .catch(err => {
@@ -71,8 +69,7 @@ export class AuthService {
           this.user = user.data();          
         }else{
           this.databaseService.addUser(this.user);
-        }
-        console.log('Auth user:',this.user);
+        }        
         this.navStateSource.next(this.user);         
       })             
     }).catch(error => {
