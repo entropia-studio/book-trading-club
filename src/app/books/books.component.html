@@ -1,6 +1,6 @@
 <form #bookForm="ngForm">
 <mat-card *ngIf="user_id">
-  Books from {{username}}       
+  Books from <strong>{{username}}</strong>       
 </mat-card>
 <mat-card class="book-list">  
   <mat-card *ngFor="let book of books; let i = index" class="book">
