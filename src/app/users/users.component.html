@@ -7,7 +7,7 @@
       <mat-card-content>              
         <h3 *ngIf="user.city">City: {{user.city}}</h3>    
         <mat-chip-list>
-        <mat-chip color="accent" selected *ngIf="user.books > 0" routerLink="/books">Books: {{user.books}}</mat-chip>
+        <mat-chip color="accent" selected *ngIf="user.books > 0" routerLink="/books/{{user.id}}">Books: {{user.books}}</mat-chip>
         <mat-chip color="primary" *ngIf="user.incoming > 0" routerLink="/requests">Incoming requests: {{user.incoming}}</mat-chip>                       
       </mat-chip-list>
       </mat-card-content>      

@@ -4,7 +4,7 @@ import {AuthService} from '../services/auth.service';
 import {Book} from '../interfaces/book';
 import {User} from '../interfaces/user';
 import {Subscription } from 'rxjs';
-
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -23,15 +23,28 @@ export class BooksComponent implements OnInit, OnDestroy {
   username: string;  
   requesButtonDisabled: boolean = true;
   booksObs: Subscription;
+  user_id: string | number;
 
-  constructor(    
+  constructor(  
+    private route: ActivatedRoute,  
     private dataBaseService: DatabaseService,
     private authService: AuthService,
     ) {}   
 
   ngOnInit() {          
       this.user = this.authService.user;
-      this.dataBaseService.user = this.user;      
+      this.dataBaseService.user = this.user;
+      // Only set if we click in User component to see this user's books
+      if (+this.route.snapshot.paramMap.get('id')){
+        this.user_id = this.route.snapshot.paramMap.get('id');  
+        // Get the username
+        this.dataBaseService.getUser(this.user_id).then(doc => {                   
+          if (doc.exists){            
+            let user = doc.data();             
+            this.username = user.username;             
+          }      
+        })
+      }
       this.booksObs = this.getBooks();
   }
 
@@ -50,9 +63,14 @@ export class BooksComponent implements OnInit, OnDestroy {
           selected: false
         });
 
+        // Only activated in My books
         if (this.parentUserName && this.parentUserName !== book.username){          
           this.books.pop();
-        }        
+        }   
+        // Only set if we click in User component to see this user's books
+        if (this.user_id && this.user_id != book.user_id){          
+          this.books.pop();
+        }         
       })      
     })      
   }

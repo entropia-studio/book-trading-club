@@ -11,7 +11,7 @@ button{
   width: 15%;  
 }
 .book-list{
-  display: flex;
+  display: flex;  
   justify-content: space-between;  
   flex-wrap: wrap;
 }

@@ -14,6 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 const routes: Routes = [
   { path: '', redirectTo: '/books', pathMatch: 'full'},
   { path: 'books' , component: BooksComponent},
+  { path: 'books/:id' , component: BooksComponent},
   { path: 'addbook' , component: AddbookComponent},
   { path: 'request/new' , component: RequestnewComponent},  
   { path: 'requests' , component: RequestsComponent},  

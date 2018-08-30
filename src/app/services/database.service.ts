@@ -183,13 +183,8 @@ export class DatabaseService {
 
   // Returns the user document if exists, if not returns a empty user object
   getUser = (id: string) : Promise<any> => {
-    let userObs: Observable<User[]>;
-    // Search the user by ID
-    this.usersCollection = this.afs.collection<User>('users',ref => ref.where('id','==',id));
-    
-    userObs = this.usersCollection.valueChanges();
-    
-    //return userObs;    
+    console.log('id',id)     
+    console.log('type',typeof id)
     return this.afs.collection<User>('users').doc(id).ref.get();
   } 
 
